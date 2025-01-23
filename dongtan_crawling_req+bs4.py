@@ -44,7 +44,9 @@ print(response.status_code)
 #soup객체에서 태그를 검색하고 텍스트를 추출한다.
 #find 메서드를 통해 HTML태그를 찾는다.(여기서 a태그) -> 찾은 태그 에서 HTML 속성으로 설정된 태그를 찾는다.(여기서 role="tab") -> 설정한 문자열이 있다면 true 없으면 false
 #파이썬 람다 함수는 lambda 매개변수:조건 으로 작성한다.
-blog_tab = soup.find("a",{"class":"tab"})
+#blog_tab = soup.find("a",{"class":"tab"})
+#a태그안에 i태그(자식 태그)가 있어서 string이 None으로 되었던 것이다. -> get_text()를 이용해서 내부 텍스트를 확인한다.
+blog_tab = soup.find("a",{"class":"tab"}, lambda tag: "블로그" in tag.get_text(strip=True))
 ## 위 코드에서 자꾸 None이 반환되어서 추후에 문제점을 찾아서 보완할 예정이다.
 
 
@@ -83,7 +85,7 @@ for item in blog_data:
 file_name = "dongtan_blog_data.csv"
 
 with open(file_name,"w",encoding="utf-8",newline="") as csvfiles:
-    writer = csv.DictWriter(csvfiles,fieldnames=["title","url"])
+    writer = csv.DictWriter(csvfiles,fieldnames=["제목","링크"])
     writer.writeheader()
     writer.writerows(blog_data)
 
